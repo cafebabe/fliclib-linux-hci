@@ -5,6 +5,7 @@ import io.flic.fliclib.javaclient.enums.CreateConnectionChannelError;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.SocketTimeoutException;
 import java.net.UnknownHostException;
@@ -26,6 +27,7 @@ import java.util.concurrent.ConcurrentSkipListMap;
  * For a more detailed description of all commands, events and enums, check the protocol specification.
  */
 public class FlicClient {
+    public static final int SOCKET_TIMEOUT_MS = 3000;
     private Socket socket;
     private InputStream socketInputStream;
     private OutputStream socketOutputStream;
@@ -51,7 +53,9 @@ public class FlicClient {
      * @throws IOException
      */
     public FlicClient(String hostName, int port) throws UnknownHostException, IOException {
-        socket = new Socket(hostName, port);
+        socket = new Socket();
+        socket.setSoTimeout(SOCKET_TIMEOUT_MS);
+        socket.connect(new InetSocketAddress(hostName, port), SOCKET_TIMEOUT_MS);
         socketInputStream = socket.getInputStream();
         socketOutputStream = socket.getOutputStream();
     }
@@ -364,7 +368,6 @@ public class FlicClient {
             }
 
             int len0;
-            socket.setSoTimeout((int)(timeout / 1000000));
             try {
                 len0 = socketInputStream.read();
             } catch (SocketTimeoutException e) {
