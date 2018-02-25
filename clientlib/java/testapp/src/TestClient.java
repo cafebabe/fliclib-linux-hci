@@ -35,7 +35,9 @@ public class TestClient {
     };
 
     public static void main(String[] args) throws IOException {
-        final FlicClient client = new FlicClient("localhost");
+        String hostName = args[0];
+        System.out.println("Connecting to " + hostName);
+        final FlicClient client = new FlicClient(hostName);
         client.getInfo(new GetInfoResponseCallback() {
             @Override
             public void onGetInfoResponse(BluetoothControllerState bluetoothControllerState, Bdaddr myBdAddr,

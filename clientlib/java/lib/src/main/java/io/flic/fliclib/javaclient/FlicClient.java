@@ -371,6 +371,7 @@ public class FlicClient {
             try {
                 len0 = socketInputStream.read();
             } catch (SocketTimeoutException e) {
+                sendPacket(new CmdPing());
                 continue;
             }
             int len1 = socketInputStream.read();
