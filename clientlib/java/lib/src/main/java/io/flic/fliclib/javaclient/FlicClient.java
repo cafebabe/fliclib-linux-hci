@@ -368,6 +368,7 @@ public class FlicClient {
             }
 
             int len0;
+            socket.setSoTimeout(Math.max(SOCKET_TIMEOUT_MS, (int)(timeout / 1000000)));
             try {
                 len0 = socketInputStream.read();
             } catch (SocketTimeoutException e) {
